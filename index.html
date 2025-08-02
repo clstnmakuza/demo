@@ -1,48 +1,24 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Sample Form</title>
-</head>
-<body>
-  <h2>Sample Form: Name and Email</h2>
+<script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbxylEGNrJJD2BvJSEQCZw24fsCxyd5wxt7W98Y7DvKCPbiFnMyQKFPFbXd_qc8FuJ_P/exec";
+  const form = document.getElementById("data-form");
+  const responseEl = document.getElementById("response");
 
-  <form id="data-form">
-    <label>Name:</label><br>
-    <input type="text" name="name" required><br><br>
+  form.addEventListener("submit", e => {
+    e.preventDefault();
+    const formData = new FormData(form);
 
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
-
-    <button type="submit">Submit</button>
-  </form>
-
-  <p id="response"></p>
-
-  <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbw8mJ5uLWKGGHsMFPePb9ZWpmRdEMRI6WThLmP79FJJABWyNqorWo2FzQg9xcCKkCeE/exec";
-    const form = document.getElementById("data-form");
-    const responseEl = document.getElementById("response");
-
-    form.addEventListener("submit", e => {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-
-      fetch(scriptURL, {
-        method: "POST",
-        body: formData
-      })
-      .then(res => res.text())
-      .then(msg => {
-        responseEl.innerText = "✅ Submitted successfully!";
-        form.reset();
-      })
-      .catch(err => {
-        responseEl.innerText = "❌ Error submitting form.";
-        console.error(err);
-      });
+    fetch(scriptURL, {
+      method: "POST",
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      responseEl.innerText = "✅ Submitted successfully!";
+      form.reset();
+    })
+    .catch(err => {
+      responseEl.innerText = "❌ Error submitting form.";
+      console.error("Submission error:", err);
     });
-  </script>
-</body>
-</html>
-
+  });
+</script>
